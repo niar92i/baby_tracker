@@ -25,7 +25,6 @@ class MilkDetailsPage extends StatefulWidget {
 
 class _MilkDetailsPageState extends State<MilkDetailsPage> {
 
-
   MilkDatabase milkDatabase = MilkDatabase.instance;
 
   final TextEditingController labelController = TextEditingController();

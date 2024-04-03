@@ -2,6 +2,8 @@ import 'package:baby_tracker/data/milk_fields.dart';
 import 'package:baby_tracker/data/milk_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:intl/intl.dart';
+
 
 class MilkDatabase {
   static final MilkDatabase instance = MilkDatabase._internal();
@@ -67,6 +69,19 @@ class MilkDatabase {
     final db = await instance.database;
     const orderBy = '${MilkFields.createdTime} DESC';
     final result = await db.query(MilkFields.tableName, orderBy: orderBy);
+    return result.map((json) => MilkModel.fromJson(json)).toList();
+  }
+
+  Future<List<MilkModel>> readByDay(DateTime dateTime) async {
+    final db = await instance.database;
+    const orderBy = '${MilkFields.createdTime} DESC';
+    final result = await db.query(
+        MilkFields.tableName,
+        where: '${MilkFields.takenDate} = ?',
+        // where: '${DateFormat('dd-MM-yyyy').format(DateTime.parse(MilkFields.takenDate))} = ?',
+        whereArgs: [DateFormat('dd-MM-yyyy').format(dateTime)],
+        orderBy: orderBy
+    );
     return result.map((json) => MilkModel.fromJson(json)).toList();
   }
 
