@@ -72,14 +72,12 @@ class MilkDatabase {
     return result.map((json) => MilkModel.fromJson(json)).toList();
   }
 
-  Future<List<MilkModel>> readByDay(DateTime dateTime) async {
+  Future<List<MilkModel>> readByDay(String dateTime) async {
     final db = await instance.database;
     const orderBy = '${MilkFields.createdTime} DESC';
     final result = await db.query(
         MilkFields.tableName,
-        where: '${MilkFields.takenDate} = ?',
-        // where: '${DateFormat('dd-MM-yyyy').format(DateTime.parse(MilkFields.takenDate))} = ?',
-        whereArgs: [DateFormat('dd-MM-yyyy').format(dateTime)],
+        where: "${MilkFields.takenDate} LIKE '%$dateTime%'",
         orderBy: orderBy
     );
     return result.map((json) => MilkModel.fromJson(json)).toList();

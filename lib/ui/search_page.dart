@@ -18,6 +18,8 @@ class _SearchPageState extends State<SearchPage> {
   String _selectedDay = 'Tap to select a day';
   List<MilkModel> milks = [];
   DateTime? datePicked;
+  DateTime? endDateTime;
+  int quantityConsumed = 0;
 
   goToMilkDetailsPage({int? id}) async {
     await Navigator.push(
@@ -61,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -109,12 +111,16 @@ class _SearchPageState extends State<SearchPage> {
           OutlinedButton(
               onPressed: () {
                 if (datePicked != null) {
-                  // milkDatabase.readByDay(DateFormat('dd-MM-yyyy').format(datePicked!)).then((value) {
-                  milkDatabase.readByDay(datePicked!).then((value) {
-                  setState(() {
-                    milks = value;
+                  milkDatabase
+                      .readByDay(DateFormat('yyyy-MM-dd').format(datePicked!))
+                      .then((value) {
+                    setState(() {
+                      milks = value;
+                      quantityConsumed = milks.fold(
+                          0,
+                          (total, model) => total + (model.quantity != null ? model.quantity! : 0));
+                    });
                   });
-                });
                 } else {
                   showDialog<String>(
                     context: context,
@@ -125,7 +131,10 @@ class _SearchPageState extends State<SearchPage> {
                         child: Column(
                           children: [
                             Icon(Icons.warning_amber_outlined),
-                            Text('Please select a day', textAlign: TextAlign.center,),
+                            Text(
+                              'Please select a day',
+                              textAlign: TextAlign.center,
+                            ),
                           ],
                         ),
                       ),
@@ -133,13 +142,18 @@ class _SearchPageState extends State<SearchPage> {
                   );
                 }
               },
-              child: const Text('Search', style: TextStyle(color: Colors.black),)),
+              child: const Text(
+                'Search',
+                style: TextStyle(color: Colors.black),
+              )),
           const SizedBox(
             height: 10,
           ),
           Expanded(
             child: milks.isEmpty
-                ? Container()
+                ? const Center(
+                    child: Text('No Data available'),
+                  )
                 : Container(
                     margin:
                         const EdgeInsets.only(left: 10, right: 10, bottom: 5),
@@ -172,6 +186,7 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
           ),
+          Text('Quantity of milk consumed : $quantityConsumed ml'),
         ],
       ),
     );

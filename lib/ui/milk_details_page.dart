@@ -1,5 +1,6 @@
 import 'package:baby_tracker/data/milk_database.dart';
 import 'package:baby_tracker/data/milk_model.dart';
+import 'package:baby_tracker/ui/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -93,7 +94,11 @@ class _MilkDetailsPageState extends State<MilkDetailsPage> {
       setState(() {
         isLoading = false;
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
     } else {
       isLoading = false;
       showDialog<String>(
@@ -109,16 +114,6 @@ class _MilkDetailsPageState extends State<MilkDetailsPage> {
               ],
             ),
           ),
-          // actions: <Widget>[
-          //   // TextButton(
-          //   //   onPressed: () => Navigator.pop(context, 'Cancel'),
-          //   //   child: const Text('Cancel'),
-          //   // ),
-          //   TextButton(
-          //     onPressed: () => Navigator.pop(context, 'OK'),
-          //     child: const Text('OK'),
-          //   ),
-          // ],
         ),
       );
     }
