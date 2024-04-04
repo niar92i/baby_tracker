@@ -56,6 +56,18 @@ class _SearchPageState extends State<SearchPage> {
           datePicked = dateTime;
           _selectedDay = DateFormat('dd/MM/yyyy').format(dateTime);
         });
+        if (datePicked != null) {
+          milkDatabase
+              .readByDay(DateFormat('yyyy-MM-dd').format(datePicked!))
+              .then((value) {
+            setState(() {
+              milks = value;
+              quantityConsumed = milks.fold(
+                  0,
+                      (total, model) => total + (model.quantity != null ? model.quantity! : 0));
+            });
+          });
+        }
       },
     );
   }
@@ -63,7 +75,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 30),
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -105,47 +117,6 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          OutlinedButton(
-              onPressed: () {
-                if (datePicked != null) {
-                  milkDatabase
-                      .readByDay(DateFormat('yyyy-MM-dd').format(datePicked!))
-                      .then((value) {
-                    setState(() {
-                      milks = value;
-                      quantityConsumed = milks.fold(
-                          0,
-                          (total, model) => total + (model.quantity != null ? model.quantity! : 0));
-                    });
-                  });
-                } else {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => const AlertDialog(
-                      // title: const Text('AlertDialog Title'),
-                      content: SizedBox(
-                        height: 50,
-                        child: Column(
-                          children: [
-                            Icon(Icons.warning_amber_outlined),
-                            Text(
-                              'Please select a day',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }
-              },
-              child: const Text(
-                'Search',
-                style: TextStyle(color: Colors.black),
-              )),
           const SizedBox(
             height: 10,
           ),

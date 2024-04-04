@@ -2,8 +2,6 @@ import 'package:baby_tracker/data/milk_fields.dart';
 import 'package:baby_tracker/data/milk_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:intl/intl.dart';
-
 
 class MilkDatabase {
   static final MilkDatabase instance = MilkDatabase._internal();
