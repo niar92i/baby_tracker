@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../data/milk_database.dart';
-import '../data/milk_model.dart';
+import '../../data/milk_database.dart';
+import '../../data/milk_model.dart';
 import 'milk_details_page.dart';
 
 class HomePageContent extends StatefulWidget {
@@ -67,9 +67,10 @@ class _HomePageContentState extends State<HomePageContent> {
                       children: [
                         Text(
                             '${entry.type.substring(0, 1).toUpperCase() + entry.type.substring(1)} | ${DateFormat('dd-MM-yyyy').format(entry.takenDate)} | ${DateFormat.Hm().format(entry.takenDate)}'),
-                        entry.quantity != null
-                            ? Text(' | ${entry.quantity.toString()} ml')
-                            : Container(),
+                        Visibility(
+                            visible: entry.quantity != null ? true : false,
+                            child: Text(
+                                ' | ${entry.quantity.toString()} ml')),
                       ],
                     )
                   ],

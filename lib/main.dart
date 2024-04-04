@@ -1,5 +1,5 @@
 import 'package:baby_tracker/themes/my_app_themes.dart';
-import 'package:baby_tracker/ui/home_page.dart';
+import 'package:baby_tracker/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {

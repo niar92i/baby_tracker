@@ -1,9 +1,12 @@
 import 'package:baby_tracker/data/milk_database.dart';
 import 'package:baby_tracker/data/milk_model.dart';
-import 'package:baby_tracker/ui/home_page.dart';
+import 'package:baby_tracker/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:intl/intl.dart';
+
+import '../../utils/number_range_text_input_formatter.dart';
 
 enum TypeLabel {
   breastmilk('Breastmilk', 'breastmilk'),
@@ -29,12 +32,12 @@ class _MilkDetailsPageState extends State<MilkDetailsPage> {
   MilkDatabase milkDatabase = MilkDatabase.instance;
 
   final TextEditingController labelController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
 
-  double currentSliderValue = 20;
+  double currentSliderValue = 0;
   TypeLabel initialSelection = TypeLabel.breastmilk;
   String? selectedType;
   late MilkModel milk;
+  var currentSliderValueController = TextEditingController();
 
   bool isLoading = false;
   bool isNewEntry = false;
@@ -187,18 +190,53 @@ class _MilkDetailsPageState extends State<MilkDetailsPage> {
                       Row(
                         children: [
                           const Text('Quantity: '),
-                          Slider(
-                            value: currentSliderValue,
-                            max: 240,
-                            divisions: 240,
-                            label: currentSliderValue.round().toString(),
-                            onChanged: (double value) {
-                              setState(() {
-                                currentSliderValue = value;
-                              });
-                            },
+                          Expanded(
+                            child: Slider(
+                              value: currentSliderValue,
+                              max: 240,
+                              divisions: 240,
+                              label: currentSliderValue.round().toString(),
+                              onChanged: (double value) {
+                                setState(() {
+                                  currentSliderValue = value;
+                                  currentSliderValueController.text = value.round().toString();
+                                });
+                              },
+                            ),
                           ),
-                          Text('${currentSliderValue.round()} ml'),
+                          SizedBox(
+                            width: 30,
+                            child: TextFormField(
+                              maxLength: 3,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                NumberRangeTextInputFormatter(1, 240),
+                              ],
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintStyle: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.black
+                                ),
+                                hintText: currentSliderValue.round().toString(),
+                                counterText: '',
+                              ),
+                              controller: currentSliderValueController,
+                              onChanged: (String? value) {
+                                if (value != "") {
+                                  setState(() {
+                                    currentSliderValue = double.tryParse(value!)!;
+                                  });
+                                } else {
+                                  setState(() {
+                                    currentSliderValue = 0;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          // Text('${currentSliderValue.round()} ml'),
+                          const Text(' ml'),
                         ],
                       ),
                     const SizedBox(height: 10,),
@@ -243,3 +281,4 @@ class _MilkDetailsPageState extends State<MilkDetailsPage> {
     );
   }
 }
+

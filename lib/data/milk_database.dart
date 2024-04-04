@@ -81,6 +81,17 @@ class MilkDatabase {
     return result.map((json) => MilkModel.fromJson(json)).toList();
   }
 
+  Future<List<MilkModel>> readByDateInterval(String startDateTime, String endDateTime) async {
+    final db = await instance.database;
+    const orderBy = '${MilkFields.createdTime} DESC';
+    final result = await db.query(
+        MilkFields.tableName,
+        where: "${MilkFields.takenDate} BETWEEN '$startDateTime' AND '$endDateTime'",
+        orderBy: orderBy
+    );
+    return result.map((json) => MilkModel.fromJson(json)).toList();
+  }
+
   Future<int> update(MilkModel milk) async {
     final db = await instance.database;
     return db.update(
