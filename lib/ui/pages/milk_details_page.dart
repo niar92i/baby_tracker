@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:intl/intl.dart';
-
 import '../../utils/number_range_text_input_formatter.dart';
 
 enum TypeLabel {
@@ -50,6 +49,12 @@ class _MilkDetailsPageState extends State<MilkDetailsPage> {
     refreshEntries();
     super.initState();
   }
+
+  // @override
+  // void dispose() {
+  //   milkDatabase.close();
+  //   super.dispose();
+  // }
 
   refreshEntries() {
     if (widget.milkId == null) {

@@ -31,12 +31,6 @@ class _SearchPageState extends State<SearchPage> {
     refreshMilks();
   }
 
-  // @override
-  // void dispose() {
-  //   milkDatabase.close();
-  //   super.dispose();
-  // }
-
   refreshMilks() {
     milkDatabase.readAll().then((value) {
       setState(() {
@@ -56,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
       onConfirm: (dateTime, List<int> index) {
         setState(() {
           startDateTimePicked = dateTime;
-          selectedStartDate = DateFormat('dd/MM/yyyy').format(dateTime);
+          selectedStartDate = DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
         });
       },
     );
@@ -73,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
       onConfirm: (dateTime, List<int> index) {
         setState(() {
           endDateTimePicked = dateTime;
-          selectedEndDate = DateFormat('dd/MM/yyyy').format(dateTime);
+          selectedEndDate = DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
         });
         milkDatabase
             .readByDateInterval(startDateTimePicked!.toIso8601String(),
@@ -186,7 +180,7 @@ class _SearchPageState extends State<SearchPage> {
                             icon: const Icon(Icons.calendar_month_outlined))
                       ],
                     )
-                  : const Text('Please select start date above'),
+                  : const Text('Please select start date above', textAlign: TextAlign.center,),
             ),
           ),
           const SizedBox(
@@ -195,9 +189,6 @@ class _SearchPageState extends State<SearchPage> {
           Visibility(
               visible: milks.isNotEmpty,
               child: Text('Quantity of milk consumed : $quantityConsumed ml')),
-          const SizedBox(
-            height: 10,
-          ),
           Expanded(
             child: milks.isEmpty
                 ? const Center(

@@ -13,8 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  PageController _myPage = PageController(initialPage: 0);
+  final PageController _myPage = PageController(initialPage: 0);
   MilkDatabase milkDatabase = MilkDatabase.instance;
   int currentPageIndex = 0;
   List<MilkModel> milks = [];
@@ -75,12 +74,9 @@ class _HomePageState extends State<HomePage> {
           controller: _myPage,
           physics: const NeverScrollableScrollPhysics(),
           children: const <Widget>[
-              /// Home page
-              HomePageContent(),
-
-              /// Search page
-              SearchPage(),
-          ], // Comment this if you need to use Swipe.
+            HomePageContent(),
+            SearchPage(),
+          ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(

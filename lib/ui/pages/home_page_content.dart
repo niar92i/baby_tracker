@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../data/milk_database.dart';
 import '../../data/milk_model.dart';
 import 'milk_details_page.dart';
@@ -22,12 +21,6 @@ class _HomePageContentState extends State<HomePageContent> {
     refreshMilks();
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   milkDatabase.close();
-  //   super.dispose();
-  // }
 
   refreshMilks() {
     milkDatabase.readAll().then((value) {
